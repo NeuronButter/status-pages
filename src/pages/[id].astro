@@ -1,0 +1,20 @@
+---
+import Error from '../components/Error.astro'
+import Layout from '../layouts/Layout.astro'
+
+import { getCollection } from 'astro:content'
+
+export async function getStaticPaths() {
+  const errors = await getCollection('errors')
+  return errors.map((ctx) => ({
+    params: { id: ctx.data.id.toString() },
+    props: { ctx: { code: ctx.data.id, message: ctx.data.message } },
+  }))
+}
+
+const { ctx } = Astro.props
+---
+
+<Layout ctx={ctx}>
+  <Error ctx={ctx} />
+</Layout>
